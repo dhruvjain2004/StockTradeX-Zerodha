@@ -22,7 +22,8 @@
   "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "vite": "^7.0.0"
   },
   "engines": {
     "node": ">=16.0.0",
