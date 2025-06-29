@@ -7,8 +7,26 @@ const cors = require("cors");
 
 const app = express();
 
+// CORS configuration for production
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',') 
+  : ['http://localhost:3000'];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 // Middleware
-app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 
@@ -21,6 +39,12 @@ const verifyToken = require('./middlewares/verifyToken');
 const PORT = process.env.PORT || 3002;
 const uri = process.env.MONGO_URL || "mongodb://localhost:27017/zerodha";
 
+// Validate required environment variables
+if (!process.env.JWT_SECRET) {
+  console.error("JWT_SECRET environment variable is required!");
+  process.exit(1);
+}
+
 // Connect to MongoDB
 mongoose.connect(uri)
   .then(() => {
@@ -28,6 +52,7 @@ mongoose.connect(uri)
   })
   .catch((err) => {
     console.error("Error connecting to the database:", err);
+    process.exit(1);
   });
 
 // API Routes
