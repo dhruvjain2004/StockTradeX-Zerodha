@@ -56,7 +56,7 @@ mongoose.connect(uri)
   });
 
 // API Routes
-app.get("/allHoldings", verifyToken, async (req, res) => {
+app.get("/api/allHoldings", verifyToken, async (req, res) => {
   try {
     const allHoldings = await HoldingsModel.find({});
     res.json(allHoldings);
@@ -66,7 +66,7 @@ app.get("/allHoldings", verifyToken, async (req, res) => {
   }
 });
 
-app.get("/allPositions", verifyToken, async (req, res) => {
+app.get("/api/allPositions", verifyToken, async (req, res) => {
   try {
     const allPositions = await PositionsModel.find({});
     res.json(allPositions);
@@ -76,7 +76,7 @@ app.get("/allPositions", verifyToken, async (req, res) => {
   }
 });
 
-app.get("/allOrders", verifyToken, async(req, res) => {
+app.get("/api/allOrders", verifyToken, async(req, res) => {
   try {
     const allOrders = await OrdersModel.find({});
     res.json(allOrders);
@@ -86,7 +86,7 @@ app.get("/allOrders", verifyToken, async(req, res) => {
   }
 });
 
-app.post("/addNewOrder", verifyToken, async (req, res) => {
+app.post("/api/addNewOrder", verifyToken, async (req, res) => {
   try {
     const { name, qty, price, mode } = req.body;
     const newOrder = new OrdersModel({
@@ -109,7 +109,7 @@ const authRoute = require("./AuthRoute.js");
 app.use('/api/auth', authRoute);
 
 // Health check endpoint
-app.get("/health", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.json({ status: "OK", message: "Server is running" });
 });
 

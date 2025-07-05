@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 // Use environment variable for API URL, fallback to localhost for development
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
+// In production on Vercel, the API will be available at the same domain
+const API_BASE_URL = import.meta.env.VITE_API_URL || 
+  (window.location.hostname === 'localhost' ? 'http://localhost:3002' : '/api');
 
 // Create axios instance with base URL
 const api = axios.create({
@@ -28,13 +30,13 @@ export const authAPI = {
 
 // Trading APIs
 export const tradingAPI = {
-  getAllHoldings: () => api.get('/allHoldings'),
-  getAllPositions: () => api.get('/allPositions'),
-  getAllOrders: () => api.get('/allOrders'),
-  addNewOrder: (orderData) => api.post('/addNewOrder', orderData),
+  getAllHoldings: () => api.get('/api/allHoldings'),
+  getAllPositions: () => api.get('/api/allPositions'),
+  getAllOrders: () => api.get('/api/allOrders'),
+  addNewOrder: (orderData) => api.post('/api/addNewOrder', orderData),
 };
 
 // Health check
-export const healthCheck = () => api.get('/health');
+export const healthCheck = () => api.get('/api/health');
 
 export default api; 
